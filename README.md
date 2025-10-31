@@ -4,6 +4,8 @@
 
 Well, I thought about it. And here we are.
 
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/a65b7173-10ab-48ee-b7a1-2dcb2620ecb9/deploy-status)](https://app.netlify.com/projects/welcome-to-nothing/deploys)
 ## What is this?
 
 A groundbreaking web application born from [a silly tweet](https://x.com/kartikp36/status/1983986578298130688) that asked the important question: what if we just... dropped the username in login?
