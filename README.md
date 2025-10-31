@@ -1,4 +1,4 @@
-# drop the username, just password.
+# [drop the username, just password.](https://welcome-to-nothing.netlify.app)
 
 > "This password is taken, please choose another one" would be hilarious if you think about it.
 
