@@ -1,8 +1,8 @@
-# [drop the username, just password.](https://welcome-to-nothing.netlify.app)
+# [drop username, just password.](https://2password.netlify.app)
 
 > "This password is taken, please choose another one" would be hilarious if you think about it.
 
-Well, I thought about it. And here we are.
+Well, I thought about it - 2Password. And here we are.
 
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/a65b7173-10ab-48ee-b7a1-2dcb2620ecb9/deploy-status)](https://app.netlify.com/projects/welcome-to-nothing/deploys)
@@ -10,7 +10,7 @@ Well, I thought about it. And here we are.
 
 A groundbreaking web application born from [a silly tweet](https://x.com/kartikp36/status/1983986578298130688) that asked the important question: what if we just... dropped the username in login?
 
-Now you can finally claim your password. Own absolutely nothing. Live your best minimalist detachment life knowing at least something belongs to you.
+Now you can finally claim your password. Own absolutely nothing. Live your best minimalist detachment life, knowing at least something belongs to you. (yet you can't prove it as only the input is saved, nothing else, literally.)
 
 ## The Vision
 
