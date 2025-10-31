@@ -13,8 +13,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        text-transform: lowercase;
       }
-
       .content {
         text-align: center;
         flex: 1;
@@ -22,7 +22,6 @@
         flex-direction: column;
         justify-content: center;
       }
-
       footer {
         text-align: center;
         padding: 20px;
@@ -32,131 +31,75 @@
   <body>
     <div class="content">
       <h1>Welcome to Nothing</h1>
-      <p>⚠️ Don't use your real passwords. This is just for fun.</p>
-
-      <form id="claimForm">
-        <label for="password">Your Password</label>
+      <p>⚠️ Disclaimer: Don't use your real passwords. This is just for fun!</p>
+      <form id="form">
+        <label for="pwd">Password:</label>
         <input
           type="password"
-          id="password"
-          name="password"
+          id="pwd"
           required
           minlength="3"
           autocomplete="off"
         />
         <br /><br />
-        <button type="submit" id="claimButton">Claim It</button>
+        <button id="btn">Claim It</button>
       </form>
-
       <div id="result"></div>
     </div>
-
     <footer>
       <hr />
       <p><small>© 2025 Nothing Corp. No passwords reserved.</small></p>
     </footer>
-
     <script>
-      // Fetch environment variables from server
       let supabase;
+      const form = document.getElementById('form');
+      const pwd = document.getElementById('pwd');
+      const btn = document.getElementById('btn');
+      const result = document.getElementById('result');
 
-      async function initializeApp() {
+      (async () => {
         try {
-          const response = await fetch('/api/config');
-          const config = await response.json();
-
-          if (!config.supabaseUrl || !config.supabaseAnonKey) {
-            throw new Error('Missing configuration');
-          }
-
+          const res = await fetch('/api/config');
+          const cfg = await res.json();
           supabase = window.supabase.createClient(
-            config.supabaseUrl,
-            config.supabaseAnonKey
+            cfg.supabaseUrl,
+            cfg.supabaseAnonKey
           );
         } catch (err) {
-          console.error('Failed to load configuration:', err);
-          showResult(
-            'Failed to load app configuration. Please check server setup.',
-            'error'
-          );
+          result.textContent = 'Failed to load config';
         }
-      }
+      })();
 
-      // Initialize on page load
-      initializeApp();
-
-      // Get form elements
-      const form = document.getElementById('claimForm');
-      const passwordInput = document.getElementById('password');
-      const claimButton = document.getElementById('claimButton');
-      const resultDiv = document.getElementById('result');
-
-      // Handle form submission
-      form.addEventListener('submit', async (e) => {
+      form.onsubmit = async (e) => {
         e.preventDefault();
-
-        const password = passwordInput.value.trim();
-
-        // Validate minimum length
-        if (password.length < 3) {
-          showResult('Password must be at least 3 characters long.', 'error');
+        const p = pwd.value.trim();
+        if (p.length < 3) {
+          result.textContent = 'Min 3 characters';
           return;
         }
-
-        // Disable button during processing
-        claimButton.disabled = true;
-        claimButton.textContent = 'Claiming...';
-        hideResult();
-
+        btn.disabled = true;
+        btn.textContent = 'Claiming...';
+        result.textContent = '';
         try {
-          // Try to insert the password
-          const { data, error } = await supabase
+          const { error } = await supabase
             .from('claimed_passwords')
-            .insert([{ password: password }])
-            .select();
-
+            .insert([{ password: p }]);
           if (error) {
-            // Check if it's a unique constraint violation
-            if (
-              error.code === '23505' ||
-              error.message.includes('duplicate') ||
-              error.message.includes('unique')
-            ) {
-              showResult(
-                'Password already taken! please choose another.',
-                'error'
-              );
-            } else {
-              showResult('An error occurred. Please try again.', 'error');
-              console.error('Supabase error:', error);
-            }
+            result.textContent =
+              error.code === '23505'
+                ? 'password already taken! please choose another.'
+                : 'error occurred';
           } else {
-            showResult(
-              'Congrats! Your password is now claimed. You own nothing.',
-              'success'
-            );
-            passwordInput.value = '';
+            result.textContent =
+              'Congrats! Your password is now claimed. You own nothing.';
+            pwd.value = '';
           }
         } catch (err) {
-          showResult(
-            'An unexpected error occurred. Please try again.',
-            'error'
-          );
-          console.error('Error:', err);
-        } finally {
-          // Re-enable button
-          claimButton.disabled = false;
-          claimButton.textContent = 'Claim It';
+          result.textContent = 'Unexpected error';
         }
-      });
-
-      function showResult(message, type) {
-        resultDiv.textContent = message;
-      }
-
-      function hideResult() {
-        resultDiv.textContent = '';
-      }
+        btn.disabled = false;
+        btn.textContent = 'Claim It';
+      };
     </script>
   </body>
 </html>
